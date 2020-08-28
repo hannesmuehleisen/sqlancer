@@ -103,7 +103,7 @@ public class DuckDBSchema extends AbstractSchema<DuckDBTable> {
             case FLOAT:
                 switch (size) {
                 case 8:
-                    return Randomly.fromOptions("DOUBLE", "NUMERIC");
+                    return Randomly.fromOptions("DOUBLE", "FLOAT8");
                 case 4:
                     return Randomly.fromOptions("REAL", "FLOAT4");
                 default:
@@ -201,6 +201,9 @@ public class DuckDBSchema extends AbstractSchema<DuckDBTable> {
             break;
         case "TIMESTAMP":
             primitiveType = DuckDBDataType.TIMESTAMP;
+            break;
+        case "INTERVAL":
+            primitiveType = DuckDBDataType.VARCHAR;
             break;
         default:
             throw new AssertionError(typeString);
