@@ -72,6 +72,8 @@ public final class DuckDBErrors {
         errors.add("extract specifier"); // date_part
         errors.add("Insufficient padding in RPAD"); // RPAD
         errors.add("Could not choose a best candidate function for the function call"); // monthname
+        errors.add("expected a numeric precision field"); // ROUND
+        errors.add("with non-constant precision is not supported"); // ROUND
     }
 
     public static void addInsertErrors(Set<String> errors) {
