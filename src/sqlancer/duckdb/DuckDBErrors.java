@@ -63,7 +63,7 @@ public final class DuckDBErrors {
     }
 
     private static void addFunctionErrors(ExpectedErrors errors) {
-        errors.add("SUBSTRING cannot handle negative offsets");
+        errors.add("SUBSTRING cannot handle negative lengths");
         errors.add("is undefined outside [-1,1]"); // ACOS etc
         errors.add("invalid type specifier"); // PRINTF
         errors.add("argument index out of range"); // PRINTF
