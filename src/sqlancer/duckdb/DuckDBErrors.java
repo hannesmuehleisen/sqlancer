@@ -13,7 +13,7 @@ public final class DuckDBErrors {
         errors.add("You might need to add explicit type casts.");
         errors.add("can't be cast because the value is out of range for the destination type");
         errors.add("field value out of range");
-        errors.add("Not implemented: Unimplemented type for cast");
+        errors.add("Unimplemented type for cast");
 
         errors.add("Escape string must be empty or one character.");
         errors.add("Type mismatch when combining rows"); // BETWEEN
