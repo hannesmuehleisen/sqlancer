@@ -40,6 +40,7 @@ public final class DuckDBErrors {
         // // https://github.com/cwida/duckdb/issues/532
         errors.add("Not implemented type: DATE");
         errors.add("Not implemented type: TIMESTAMP");
+        errors.add("Like pattern must not end with escape character!"); // LIKE
 
         errors.add("does not have a column named \"rowid\""); // TODO: this can be removed if we can query whether a
                                                               // table supports rowids
@@ -69,6 +70,7 @@ public final class DuckDBErrors {
         errors.add("argument index out of range"); // PRINTF
         errors.add("invalid format string"); // PRINTF
         errors.add("number is too big"); // PRINTF
+        errors.add("Like pattern must not end with escape character!"); // LIKE
         errors.add("Could not choose a best candidate function for the function call \"date_part"); // date_part
         errors.add("extract specifier"); // date_part
         errors.add("Insufficient padding in RPAD"); // RPAD
