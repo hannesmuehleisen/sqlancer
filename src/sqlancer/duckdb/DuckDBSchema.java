@@ -20,7 +20,7 @@ public class DuckDBSchema extends AbstractSchema<DuckDBTable> {
 
     public enum DuckDBDataType {
 
-        INT, VARCHAR, BOOLEAN, FLOAT, DATE, TIMESTAMP;
+        UINT, INT, VARCHAR, BOOLEAN, FLOAT, DATE, TIMESTAMP;
 
         public static DuckDBDataType getRandom() {
             return Randomly.fromOptions(values());
@@ -59,20 +59,21 @@ public class DuckDBSchema extends AbstractSchema<DuckDBTable> {
             DuckDBDataType type = DuckDBDataType.getRandom();
             int size = -1;
             switch (type) {
-            case INT:
-                size = Randomly.fromOptions(1, 2, 4, 8);
-                break;
-            case FLOAT:
-                size = Randomly.fromOptions(4, 8);
-                break;
-            case BOOLEAN:
-            case VARCHAR:
-            case DATE:
-            case TIMESTAMP:
-                size = 0;
-                break;
-            default:
-                throw new AssertionError(type);
+                case UINT:
+                case INT:
+                    size = Randomly.fromOptions(1, 2, 4, 8);
+                    break;
+                case FLOAT:
+                    size = Randomly.fromOptions(4, 8);
+                    break;
+                case BOOLEAN:
+                case VARCHAR:
+                case DATE:
+                case TIMESTAMP:
+                    size = 0;
+                    break;
+                default:
+                    throw new AssertionError(type);
             }
 
             return new DuckDBCompositeDataType(type, size);
@@ -85,38 +86,51 @@ public class DuckDBSchema extends AbstractSchema<DuckDBTable> {
         @Override
         public String toString() {
             switch (getPrimitiveDataType()) {
-            case INT:
-                switch (size) {
-                case 8:
-                    return Randomly.fromOptions("BIGINT", "INT8");
-                case 4:
-                    return Randomly.fromOptions("INTEGER", "INT", "INT4", "SIGNED");
-                case 2:
-                    return Randomly.fromOptions("SMALLINT", "INT2");
-                case 1:
-                    return Randomly.fromOptions("TINYINT", "INT1");
+                case UINT:
+                    switch (size) {
+                        case 8:
+                            return Randomly.fromOptions("UBIGINT");
+                        case 4:
+                            return Randomly.fromOptions("UINTEGER");
+                        case 2:
+                            return Randomly.fromOptions("USMALLINT");
+                        case 1:
+                            return Randomly.fromOptions("UTINYINT");
+                        default:
+                            throw new AssertionError(size);
+                    }
+                case INT:
+                    switch (size) {
+                        case 8:
+                            return Randomly.fromOptions("BIGINT", "INT8");
+                        case 4:
+                            return Randomly.fromOptions("INTEGER", "INT", "INT4", "SIGNED");
+                        case 2:
+                            return Randomly.fromOptions("SMALLINT", "INT2");
+                        case 1:
+                            return Randomly.fromOptions("TINYINT", "INT1");
+                        default:
+                            throw new AssertionError(size);
+                    }
+                case VARCHAR:
+                    return "VARCHAR";
+                case FLOAT:
+                    switch (size) {
+                        case 8:
+                            return Randomly.fromOptions("DOUBLE", "FLOAT8");
+                        case 4:
+                            return Randomly.fromOptions("REAL", "FLOAT4");
+                        default:
+                            throw new AssertionError(size);
+                    }
+                case BOOLEAN:
+                    return Randomly.fromOptions("BOOLEAN", "BOOL");
+                case TIMESTAMP:
+                    return Randomly.fromOptions("TIMESTAMP", "DATETIME");
+                case DATE:
+                    return Randomly.fromOptions("DATE");
                 default:
-                    throw new AssertionError(size);
-                }
-            case VARCHAR:
-                return "VARCHAR";
-            case FLOAT:
-                switch (size) {
-                case 8:
-                    return Randomly.fromOptions("DOUBLE", "FLOAT8");
-                case 4:
-                    return Randomly.fromOptions("REAL", "FLOAT4");
-                default:
-                    throw new AssertionError(size);
-                }
-            case BOOLEAN:
-                return Randomly.fromOptions("BOOLEAN", "BOOL");
-            case TIMESTAMP:
-                return Randomly.fromOptions("TIMESTAMP", "DATETIME");
-            case DATE:
-                return Randomly.fromOptions("DATE");
-            default:
-                throw new AssertionError(getPrimitiveDataType());
+                    throw new AssertionError(getPrimitiveDataType());
             }
         }
 
@@ -166,47 +180,63 @@ public class DuckDBSchema extends AbstractSchema<DuckDBTable> {
             return new DuckDBCompositeDataType(DuckDBDataType.FLOAT, 8);
         }
         switch (typeString) {
-        case "INTEGER":
-            primitiveType = DuckDBDataType.INT;
-            size = 4;
-            break;
-        case "SMALLINT":
-            primitiveType = DuckDBDataType.INT;
-            size = 2;
-            break;
-        case "BIGINT":
-            primitiveType = DuckDBDataType.INT;
-            size = 8;
-            break;
-        case "TINYINT":
-            primitiveType = DuckDBDataType.INT;
-            size = 1;
-            break;
-        case "VARCHAR":
-            primitiveType = DuckDBDataType.VARCHAR;
-            break;
-        case "FLOAT":
-            primitiveType = DuckDBDataType.FLOAT;
-            size = 4;
-            break;
-        case "DOUBLE":
-            primitiveType = DuckDBDataType.FLOAT;
-            size = 8;
-            break;
-        case "BOOLEAN":
-            primitiveType = DuckDBDataType.BOOLEAN;
-            break;
-        case "DATE":
-            primitiveType = DuckDBDataType.DATE;
-            break;
-        case "TIMESTAMP":
-            primitiveType = DuckDBDataType.TIMESTAMP;
-            break;
-        case "INTERVAL":
-            primitiveType = DuckDBDataType.VARCHAR;
-            break;
-        default:
-            throw new AssertionError(typeString);
+            case "UINTEGER":
+                primitiveType = DuckDBDataType.UINT;
+                size = 4;
+                break;
+            case "USMALLINT":
+                primitiveType = DuckDBDataType.UINT;
+                size = 2;
+                break;
+            case "UBIGINT":
+                primitiveType = DuckDBDataType.UINT;
+                size = 8;
+                break;
+            case "UTINYINT":
+                primitiveType = DuckDBDataType.UINT;
+                size = 1;
+                break;
+            case "INTEGER":
+                primitiveType = DuckDBDataType.INT;
+                size = 4;
+                break;
+            case "SMALLINT":
+                primitiveType = DuckDBDataType.INT;
+                size = 2;
+                break;
+            case "BIGINT":
+                primitiveType = DuckDBDataType.INT;
+                size = 8;
+                break;
+            case "TINYINT":
+                primitiveType = DuckDBDataType.INT;
+                size = 1;
+                break;
+            case "VARCHAR":
+                primitiveType = DuckDBDataType.VARCHAR;
+                break;
+            case "FLOAT":
+                primitiveType = DuckDBDataType.FLOAT;
+                size = 4;
+                break;
+            case "DOUBLE":
+                primitiveType = DuckDBDataType.FLOAT;
+                size = 8;
+                break;
+            case "BOOLEAN":
+                primitiveType = DuckDBDataType.BOOLEAN;
+                break;
+            case "DATE":
+                primitiveType = DuckDBDataType.DATE;
+                break;
+            case "TIMESTAMP":
+                primitiveType = DuckDBDataType.TIMESTAMP;
+                break;
+            case "INTERVAL":
+                primitiveType = DuckDBDataType.VARCHAR;
+                break;
+            default:
+                throw new AssertionError(typeString);
         }
         return new DuckDBCompositeDataType(primitiveType, size);
     }
