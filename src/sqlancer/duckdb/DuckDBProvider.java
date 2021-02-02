@@ -2,6 +2,8 @@ package sqlancer.duckdb;
 
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Connection;
+import java.sql.Statement;
 
 import sqlancer.AbstractAction;
 import sqlancer.IgnoreMeException;
@@ -116,9 +118,14 @@ public class DuckDBProvider extends SQLProviderAdapter<DuckDBGlobalState, DuckDB
 
     @Override
     public SQLConnection createDatabase(DuckDBGlobalState globalState) throws SQLException {
-        String url = "jdbc:duckdb:";
-        return new SQLConnection(DriverManager.getConnection(url, globalState.getOptions().getUserName(),
-                globalState.getOptions().getPassword()));
+        String url = "jdbc:duckdb:" + System.getProperty("duckdb.database.file", "");
+        
+        Connection conn = DriverManager.getConnection(url, globalState.getOptions().getUserName(),
+                globalState.getOptions().getPassword());
+        Statement stmt = conn.createStatement();
+        stmt.execute("PRAGMA checkpoint_threshold='1 byte';");
+        stmt.close();
+        return new SQLConnection(conn);
     }
 
     @Override
