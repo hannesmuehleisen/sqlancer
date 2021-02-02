@@ -91,6 +91,7 @@ public final class DuckDBErrors {
         errors.add(" Column with name rowid does not exist!"); // currently, there doesn't seem to way to determine if
                                                                // the table has a primary key
         errors.add("Out of Range: Could not cast value");
+        errors.add("create unique index, table contains duplicate data");
     }
 
     public static void addGroupByErrors(ExpectedErrors errors) {
