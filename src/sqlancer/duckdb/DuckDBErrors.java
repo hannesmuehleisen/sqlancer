@@ -23,7 +23,7 @@ public final class DuckDBErrors {
         errors.add("invalid UTF-8"); // TODO
         errors.add("String value is not valid UTF8");
 
-        errors.add("Conversion: Invalid TypeId "); // TODO
+        errors.add("Invalid TypeId "); // TODO
 
         errors.add("GROUP BY clause cannot contain aggregates!"); // investigate
 
@@ -33,7 +33,7 @@ public final class DuckDBErrors {
 
         errors.add("Overflow in multiplication");
         errors.add("Out of Range");
-        errors.add("Conversion: Date out of range");
+        errors.add("Date out of range");
 
         // collate
         errors.add("Cannot combine types with different collation!");
