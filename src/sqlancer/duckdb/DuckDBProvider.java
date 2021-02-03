@@ -4,6 +4,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Connection;
 import java.sql.Statement;
+import java.io.File;
 
 import sqlancer.AbstractAction;
 import sqlancer.IgnoreMeException;
@@ -116,10 +117,28 @@ public class DuckDBProvider extends SQLProviderAdapter<DuckDBGlobalState, DuckDB
         se.executeStatements();
     }
 
+    public void tryDeleteFile(String fname) {
+        try {
+            File f = new File(fname);
+            f.delete();
+        } catch(Exception e) {
+        }
+    }
+
+    public void tryDeleteDatabase(String dbpath) {
+        if (dbpath.equals("") || dbpath.equals(":memory:")) {
+            return;
+        }
+        tryDeleteFile(dbpath);
+        tryDeleteFile(dbpath + ".wal");
+    }
+
     @Override
     public SQLConnection createDatabase(DuckDBGlobalState globalState) throws SQLException {
-        String url = "jdbc:duckdb:" + System.getProperty("duckdb.database.file", "");
-        
+        String database_file = System.getProperty("duckdb.database.file", "");
+        String url = "jdbc:duckdb:" + database_file;
+        tryDeleteDatabase(database_file);
+
         Connection conn = DriverManager.getConnection(url, globalState.getOptions().getUserName(),
                 globalState.getOptions().getPassword());
         Statement stmt = conn.createStatement();
