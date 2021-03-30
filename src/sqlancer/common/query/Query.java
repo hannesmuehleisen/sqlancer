@@ -51,6 +51,10 @@ public abstract class Query {
     }
 
     private void logQueryString(GlobalState<?, ?> globalState) {
+        if (globalState.getOptions().printAllStatements()) {
+            System.out.println(q.getQueryString());
+            System.out.flush();
+        }
         if (globalState.getOptions().logEachSelect()) {
             globalState.getLogger().writeCurrent(getQueryString());
         }

@@ -102,6 +102,7 @@ public abstract class GlobalState<O extends DBMSSpecificOptions<?>, S extends Ab
         }
         if (getOptions().printAllStatements()) {
             System.out.println(q.getQueryString());
+            System.out.flush();
         }
         if (getOptions().logEachSelect()) {
             if (logExecutionTime) {
