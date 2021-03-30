@@ -86,6 +86,9 @@ public class DuckDBNoRECOracle extends NoRECBase<DuckDBGlobalState> implements T
         Query q = new QueryAdapter(unoptimizedQueryString, errors);
         SQLancerResultSet rs;
         try {
+            if (options.printAllStatements()) {
+                System.out.println(unoptimizedQueryString);
+            }
             if (options.logEachSelect()) {
                 logger.writeCurrent(unoptimizedQueryString);
                 try {
@@ -127,6 +130,9 @@ public class DuckDBNoRECOracle extends NoRECBase<DuckDBGlobalState> implements T
         int firstCount = 0;
         try (Statement stat = con.createStatement()) {
             optimizedQueryString = DuckDBToStringVisitor.asString(select);
+            if (options.printAllStatements()) {
+                System.out.println(optimizedQueryString);
+            }
             if (options.logEachSelect()) {
                 logger.writeCurrent(optimizedQueryString);
                 try {
