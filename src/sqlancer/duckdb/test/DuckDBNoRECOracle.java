@@ -86,6 +86,13 @@ public class DuckDBNoRECOracle extends NoRECBase<DuckDBGlobalState> implements T
         Query q = new QueryAdapter(unoptimizedQueryString, errors);
         SQLancerResultSet rs;
         try {
+            if (options.logEachSelect()) {
+                logger.writeCurrent(unoptimizedQueryString);
+                try {
+                    logger.getCurrentFileWriter().flush();
+                } catch (Exception e) {
+                }
+            }
             rs = q.executeAndGetLogged(state);
         } catch (Exception e) {
             throw new AssertionError(unoptimizedQueryString, e);
