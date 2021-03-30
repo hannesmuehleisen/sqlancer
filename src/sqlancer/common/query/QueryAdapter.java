@@ -69,6 +69,10 @@ public class QueryAdapter extends Query {
 
     @Override
     public boolean execute(GlobalState<?, ?> globalState, String... fills) throws SQLException {
+        if (globalState.getOptions().printAllStatements()) {
+            System.out.println(getQueryString());
+            System.out.flush();
+        }
         Statement s;
         if (fills.length > 0) {
             s = globalState.getConnection().prepareStatement(fills[0]);
@@ -101,6 +105,10 @@ public class QueryAdapter extends Query {
 
     @Override
     public SQLancerResultSet executeAndGet(GlobalState<?, ?> globalState, String... fills) throws SQLException {
+        if (globalState.getOptions().printAllStatements()) {
+            System.out.println(getQueryString());
+            System.out.flush();
+        }
         Statement s;
         if (fills.length > 0) {
             s = globalState.getConnection().prepareStatement(fills[0]);
