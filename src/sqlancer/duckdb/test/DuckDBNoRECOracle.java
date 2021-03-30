@@ -122,6 +122,12 @@ public class DuckDBNoRECOracle extends NoRECBase<DuckDBGlobalState> implements T
             optimizedQueryString = DuckDBToStringVisitor.asString(select);
             if (options.logEachSelect()) {
                 logger.writeCurrent(optimizedQueryString);
+                try {
+                    logger.getCurrentFileWriter().flush();
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
             }
             try (ResultSet rs = stat.executeQuery(optimizedQueryString)) {
                 while (rs.next()) {
