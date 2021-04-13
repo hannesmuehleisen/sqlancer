@@ -75,6 +75,8 @@ public final class DuckDBErrors {
         errors.add("Like pattern must not end with escape character!"); // LIKE
         errors.add("Could not choose a best candidate function for the function call \"date_part"); // date_part
         errors.add("extract specifier"); // date_part
+        errors.add("not recognized"); // date_part
+        errors.add("not supported"); // date_part
         errors.add("Insufficient padding in RPAD"); // RPAD
         errors.add("Could not choose a best candidate function for the function call"); // monthname
         errors.add("expected a numeric precision field"); // ROUND
