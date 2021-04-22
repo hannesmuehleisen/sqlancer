@@ -77,47 +77,47 @@ public final class DuckDBExpressionGenerator extends UntypedExpressionGenerator<
         }
         Expression expr = Randomly.fromList(possibleOptions);
         switch (expr) {
-        case COLLATE:
-            return new NewUnaryPostfixOperatorNode<DuckDBExpression>(generateExpression(depth + 1),
-                    DuckDBCollate.getRandom());
-        case UNARY_PREFIX:
-            return new NewUnaryPrefixOperatorNode<DuckDBExpression>(generateExpression(depth + 1),
-                    DuckDBUnaryPrefixOperator.getRandom());
-        case UNARY_POSTFIX:
-            return new NewUnaryPostfixOperatorNode<DuckDBExpression>(generateExpression(depth + 1),
-                    DuckDBUnaryPostfixOperator.getRandom());
-        case BINARY_COMPARISON:
-            Operator op = DuckDBBinaryComparisonOperator.getRandom();
-            return new NewBinaryOperatorNode<DuckDBExpression>(generateExpression(depth + 1),
-                    generateExpression(depth + 1), op);
-        case BINARY_LOGICAL:
-            op = DuckDBBinaryLogicalOperator.getRandom();
-            return new NewBinaryOperatorNode<DuckDBExpression>(generateExpression(depth + 1),
-                    generateExpression(depth + 1), op);
-        case BINARY_ARITHMETIC:
-            return new NewBinaryOperatorNode<DuckDBExpression>(generateExpression(depth + 1),
-                    generateExpression(depth + 1), DuckDBBinaryArithmeticOperator.getRandom());
-        case CAST:
-            return new DuckDBCastOperation(generateExpression(depth + 1), DuckDBCompositeDataType.getRandom());
-        case FUNC:
-            DBFunction func = DBFunction.getRandom();
-            return new NewFunctionNode<DuckDBExpression, DBFunction>(generateExpressions(func.getNrArgs()), func);
-        case BETWEEN:
-            return new NewBetweenOperatorNode<DuckDBExpression>(generateExpression(depth + 1),
-                    generateExpression(depth + 1), generateExpression(depth + 1), Randomly.getBoolean());
-        case IN:
-            return new NewInOperatorNode<DuckDBExpression>(generateExpression(depth + 1),
-                    generateExpressions(depth + 1, Randomly.smallNumber() + 1), Randomly.getBoolean());
-        case CASE:
-            int nr = Randomly.smallNumber() + 1;
-            return new NewCaseOperatorNode<DuckDBExpression>(generateExpression(depth + 1),
-                    generateExpressions(depth + 1, nr), generateExpressions(depth + 1, nr),
-                    generateExpression(depth + 1));
-        case LIKE_ESCAPE:
-            return new NewTernaryNode<DuckDBExpression>(generateExpression(depth + 1), generateExpression(depth + 1),
-                    generateExpression(depth + 1), "LIKE", "ESCAPE");
-        default:
-            throw new AssertionError();
+            case COLLATE:
+                return new NewUnaryPostfixOperatorNode<DuckDBExpression>(generateExpression(depth + 1),
+                        DuckDBCollate.getRandom());
+            case UNARY_PREFIX:
+                return new NewUnaryPrefixOperatorNode<DuckDBExpression>(generateExpression(depth + 1),
+                        DuckDBUnaryPrefixOperator.getRandom());
+            case UNARY_POSTFIX:
+                return new NewUnaryPostfixOperatorNode<DuckDBExpression>(generateExpression(depth + 1),
+                        DuckDBUnaryPostfixOperator.getRandom());
+            case BINARY_COMPARISON:
+                Operator op = DuckDBBinaryComparisonOperator.getRandom();
+                return new NewBinaryOperatorNode<DuckDBExpression>(generateExpression(depth + 1),
+                        generateExpression(depth + 1), op);
+            case BINARY_LOGICAL:
+                op = DuckDBBinaryLogicalOperator.getRandom();
+                return new NewBinaryOperatorNode<DuckDBExpression>(generateExpression(depth + 1),
+                        generateExpression(depth + 1), op);
+            case BINARY_ARITHMETIC:
+                return new NewBinaryOperatorNode<DuckDBExpression>(generateExpression(depth + 1),
+                        generateExpression(depth + 1), DuckDBBinaryArithmeticOperator.getRandom());
+            case CAST:
+                return new DuckDBCastOperation(generateExpression(depth + 1), DuckDBCompositeDataType.getRandom());
+            case FUNC:
+                DBFunction func = DBFunction.getRandom();
+                return new NewFunctionNode<DuckDBExpression, DBFunction>(generateExpressions(func.getNrArgs()), func);
+            case BETWEEN:
+                return new NewBetweenOperatorNode<DuckDBExpression>(generateExpression(depth + 1),
+                        generateExpression(depth + 1), generateExpression(depth + 1), Randomly.getBoolean());
+            case IN:
+                return new NewInOperatorNode<DuckDBExpression>(generateExpression(depth + 1),
+                        generateExpressions(depth + 1, Randomly.smallNumber() + 1), Randomly.getBoolean());
+            case CASE:
+                int nr = Randomly.smallNumber() + 1;
+                return new NewCaseOperatorNode<DuckDBExpression>(generateExpression(depth + 1),
+                        generateExpressions(depth + 1, nr), generateExpressions(depth + 1, nr),
+                        generateExpression(depth + 1));
+            case LIKE_ESCAPE:
+                return new NewTernaryNode<DuckDBExpression>(generateExpression(depth + 1), generateExpression(depth + 1),
+                        generateExpression(depth + 1), "LIKE", "ESCAPE");
+            default:
+                throw new AssertionError();
         }
     }
 
@@ -134,38 +134,39 @@ public final class DuckDBExpressionGenerator extends UntypedExpressionGenerator<
         }
         DuckDBDataType type = DuckDBDataType.getRandom();
         switch (type) {
-        case INT:
-            if (!globalState.getDmbsSpecificOptions().testIntConstants) {
-                throw new IgnoreMeException();
-            }
-            return DuckDBConstant.createIntConstant(globalState.getRandomly().getInteger());
-        case DATE:
-            if (!globalState.getDmbsSpecificOptions().testDateConstants) {
-                throw new IgnoreMeException();
-            }
-            return DuckDBConstant.createDateConstant(globalState.getRandomly().getInteger());
-        case TIMESTAMP:
-            if (!globalState.getDmbsSpecificOptions().testTimestampConstants) {
-                throw new IgnoreMeException();
-            }
-            return DuckDBConstant.createTimestampConstant(globalState.getRandomly().getInteger());
-        case VARCHAR:
-            if (!globalState.getDmbsSpecificOptions().testStringConstants) {
-                throw new IgnoreMeException();
-            }
-            return DuckDBConstant.createStringConstant(globalState.getRandomly().getString());
-        case BOOLEAN:
-            if (!globalState.getDmbsSpecificOptions().testBooleanConstants) {
-                throw new IgnoreMeException();
-            }
-            return DuckDBConstant.createBooleanConstant(Randomly.getBoolean());
-        case FLOAT:
-            if (!globalState.getDmbsSpecificOptions().testFloatConstants) {
-                throw new IgnoreMeException();
-            }
-            return DuckDBConstant.createFloatConstant(globalState.getRandomly().getDouble());
-        default:
-            throw new AssertionError();
+            case UINT:
+            case INT:
+                if (!globalState.getDmbsSpecificOptions().testIntConstants) {
+                    throw new IgnoreMeException();
+                }
+                return DuckDBConstant.createIntConstant(globalState.getRandomly().getInteger());
+            case DATE:
+                if (!globalState.getDmbsSpecificOptions().testDateConstants) {
+                    throw new IgnoreMeException();
+                }
+                return DuckDBConstant.createDateConstant(globalState.getRandomly().getInteger());
+            case TIMESTAMP:
+                if (!globalState.getDmbsSpecificOptions().testTimestampConstants) {
+                    throw new IgnoreMeException();
+                }
+                return DuckDBConstant.createTimestampConstant(globalState.getRandomly().getInteger());
+            case VARCHAR:
+                if (!globalState.getDmbsSpecificOptions().testStringConstants) {
+                    throw new IgnoreMeException();
+                }
+                return DuckDBConstant.createStringConstant(globalState.getRandomly().getString());
+            case BOOLEAN:
+                if (!globalState.getDmbsSpecificOptions().testBooleanConstants) {
+                    throw new IgnoreMeException();
+                }
+                return DuckDBConstant.createBooleanConstant(Randomly.getBoolean());
+            case FLOAT:
+                if (!globalState.getDmbsSpecificOptions().testFloatConstants) {
+                    throw new IgnoreMeException();
+                }
+                return DuckDBConstant.createFloatConstant(globalState.getRandomly().getDouble());
+            default:
+                throw new AssertionError();
         }
     }
 
@@ -180,7 +181,9 @@ public final class DuckDBExpressionGenerator extends UntypedExpressionGenerator<
             newExpr.add(curExpr);
         }
         return newExpr;
-    };
+    }
+
+    ;
 
     public static class DuckDBCastOperation extends NewUnaryPostfixOperatorNode<DuckDBExpression> {
 
