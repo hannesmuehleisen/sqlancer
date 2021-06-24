@@ -86,7 +86,7 @@ public final class DuckDBErrors {
     public static void addInsertErrors(ExpectedErrors errors) {
         errors.add("NOT NULL constraint failed");
         errors.add("PRIMARY KEY or UNIQUE constraint violated");
-        errors.add("duplicate key value violates primary key or unique constraint");
+        errors.add("duplicate key");
         errors.add("can't be cast because the value is out of range for the destination type");
         errors.add("Could not convert string");
         errors.add("timestamp field value out of range");
